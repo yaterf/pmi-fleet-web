@@ -1,0 +1,39 @@
+# Turns on "Enforce HTTPS" for auto.pmiupstatesc.com as soon as GitHub has issued the certificate
+# (which can only happen after the DNS record exists), then disables itself.
+name: Enforce HTTPS when the certificate is ready
+
+on:
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  actions: write
+
+jobs:
+  enforce:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Try to enforce HTTPS
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -u
+          info=$(gh api "repos/$REPO/pages")
+          echo "Pages: $(jq -c '{cname, https_enforced, cert: (.https_certificate.state // "none")}' <<<"$info")"
+          if [ "$(jq -r '.https_enforced' <<<"$info")" != "true" ]; then
+            if out=$(gh api -X PUT "repos/$REPO/pages" -F https_enforced=true 2>&1); then
+              echo "HTTPS enforcement turned on."
+            else
+              echo "Not yet: $out"
+              if grep -qiE "not accessible|HTTP 403" <<<"$out"; then
+                echo "::error::The workflow token cannot change Pages settings."
+                exit 1
+              fi
+              exit 0
+            fi
+          fi
+          gh workflow disable enforce-https.yml -R "$REPO"
+          echo "HTTPS is enforced. This workflow is now disabled."
