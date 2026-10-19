@@ -1,6 +1,6 @@
 // Service worker for the PMI Fleet home-screen app. It keeps the small branded shell (this page,
 // logo, icons) available so the app opens instantly. The app itself always loads live from Google.
-const CACHE = 'pmi-fleet-shell-v2';
+const CACHE = 'pmi-fleet-shell-v3';
 const SHELL = ['./', 'index.html', 'logo.png', 'favicon.png', 'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
