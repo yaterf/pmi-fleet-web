@@ -74,6 +74,23 @@
       setTimeout(function () { document.getElementById('slow').classList.add('show'); }, 9000);
       frame.src = APP_URL;
 
+      // Keeps a backup copy of the PMI Fleet sign-in for the app frame (see "Remembering the sign-in" in App.html).
+      var TOKEN_KEY = 'pmiFleetSession';
+      var APP_FRAME_ORIGIN = /^https:\/\/[a-z0-9-]+-script\.googleusercontent\.com$/;
+      window.addEventListener('message', function (e) {
+        if (!APP_FRAME_ORIGIN.test(e.origin) || !e.data || typeof e.data !== 'object') return;
+        if (e.data.type === 'pmi-fleet:get-token') {
+          var t = null;
+          try { t = localStorage.getItem(TOKEN_KEY); } catch (x) {}
+          e.source.postMessage({ type: 'pmi-fleet:token', token: t }, e.origin);
+        } else if (e.data.type === 'pmi-fleet:set-token') {
+          try {
+            if (e.data.token) localStorage.setItem(TOKEN_KEY, String(e.data.token));
+            else localStorage.removeItem(TOKEN_KEY);
+          } catch (x) {}
+        }
+      });
+
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
       }
