@@ -1,14 +1,17 @@
 {
+  "id": "./",
   "name": "PMI Fleet",
   "short_name": "PMI Fleet",
-  "description": "Reserve the PMI Upstate SC company car.",
+  "description": "Reserve the PMI Upstate SC company car and see when it is free.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#101114",
   "theme_color": "#101114",
+  "categories": ["business", "productivity"],
   "icons": [
-    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
