@@ -55,7 +55,10 @@
     <div>Loading PMI Fleet...</div>
     <div class="slow" id="slow">Taking a while? <a id="direct" href="#" target="_blank" rel="noopener">Open the app directly</a></div>
   </div>
-  <iframe id="app" title="PMI Fleet" allow="clipboard-write"></iframe>
+  <!-- credentialless: the app frame opens without the browser's Google sign-ins. A phone signed in to several
+       Google accounts otherwise gets Google's "Sorry, unable to open the file at this time." The app keeps its
+       own sign-in through the backup copy this page holds (see the message listener below). -->
+  <iframe id="app" title="PMI Fleet" allow="clipboard-write" credentialless></iframe>
   <div class="install" id="install" role="dialog" aria-label="Install PMI Fleet" hidden>
     <img src="icon-192.png" alt="">
     <div class="txt" id="install-txt"></div>
